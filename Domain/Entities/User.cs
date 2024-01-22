@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities;
@@ -11,7 +10,7 @@ public class User
 {
     [Key]
     [Column("user_id")]
-    public int Id { get; set; }
+    public int Id { get; private set; }
     [Required]
     [Column("user_name")]
     public string Name { get; set; }
@@ -24,8 +23,6 @@ public class User
     [Required]
     [Column("user_password")]
     public string Password { get; set; }
-    [Required]
-    [Column("user_role")]
-    public Roles Roles { get; set; }
-    public ICollection<Chat> Chats { get; } = new List<Chat>();
+
+    public ICollection<Chat> Chats { get; private set; } = new List<Chat>();
 }

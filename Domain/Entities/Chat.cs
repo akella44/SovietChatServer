@@ -7,8 +7,5 @@ public class Chat
 {
     [Key]
     [Column("chat_id")]
-    public int ChatId { get; set; }
-    [Required]
-    [Column("encrypt_key")]
-    public string EncryptKey { get; set; }
+    public int ChatId { get; private set; }
 }

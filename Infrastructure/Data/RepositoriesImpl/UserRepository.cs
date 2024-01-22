@@ -12,23 +12,25 @@ public class UserRepository : IUserRepository
     {
         _appDbContext = appDbContext;
     }
-
     public async Task<User> GetUserByTag(string tag)
     {
         return await _appDbContext.Users
             .FirstAsync(e => e.Tag == tag);
     }
-
+    public async Task<User> GetUserByEmail(string email)
+    {
+        return await _appDbContext.Users
+            .FirstAsync(e => e.Email == email);
+    }
     public async Task UpdateUser(User user)
     {
         throw new NotImplementedException();
     }
-
     public async Task AddUser(User user)
     {
-        throw new NotImplementedException();
+        await _appDbContext.Users.AddAsync(user);
+        await _appDbContext.SaveChangesAsync();
     }
-
     public async Task DeleteUser(User user)
     {
         throw new NotImplementedException();
