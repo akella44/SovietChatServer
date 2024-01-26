@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Customers.InitSession;
 
-public class InitSessionCommandHandler : IRequestHandler<InitSessionCommand, Session>
+public class InitSessionCommandHandler : IRequestHandler<InitSessionCommand, InitialSession>
 {
     public ISessionRepository _sessionRepository;
     
@@ -15,9 +15,9 @@ public class InitSessionCommandHandler : IRequestHandler<InitSessionCommand, Ses
         _sessionRepository = sessionRepository;
     }
 
-    public async Task<Session> Handle(InitSessionCommand request, CancellationToken cancellationToken)
+    public async Task<InitialSession> Handle(InitSessionCommand request, CancellationToken cancellationToken)
     {
-        var session = new Session()
+        var session = new InitialSession()
         {
             PublicKey = request.ClientPublicKey
         };

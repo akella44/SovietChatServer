@@ -30,7 +30,5 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, string>
         var token = _jwtProvider.GenerateJwtToken(user);
         
         return token;
-        /*return AesService.EncryptData(Convert.ToBase64String(Encoding.UTF8.GetBytes(token)),
-            session.SessionKey);*/
     }
 }

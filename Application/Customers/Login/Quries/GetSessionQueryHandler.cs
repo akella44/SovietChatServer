@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Customers.Login.Quries;
 
-public class GetSessionQueryHandler : IRequestHandler<GetSessionQuery, Session>
+public class GetSessionQueryHandler : IRequestHandler<GetSessionQuery, InitialSession>
 {
     public ISessionRepository _sessionRepository;
 
@@ -13,7 +13,7 @@ public class GetSessionQueryHandler : IRequestHandler<GetSessionQuery, Session>
         _sessionRepository = sessionRepository;
     }
     
-    public async Task<Session> Handle(GetSessionQuery request, CancellationToken cancellationToken)
+    public async Task<InitialSession> Handle(GetSessionQuery request, CancellationToken cancellationToken)
     {
         return await _sessionRepository.GetBySignature(request.Signature);
     }

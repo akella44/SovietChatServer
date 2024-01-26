@@ -13,19 +13,19 @@ public class SessionRepository : ISessionRepository
         _appDbContext = appDbContext;
     }
 
-    public async Task AddSession(Session session)
+    public async Task AddSession(InitialSession initialSession)
     {
-       await _appDbContext.Sessions.AddAsync(session);
+       await _appDbContext.Sessions.AddAsync(initialSession);
        await _appDbContext.SaveChangesAsync();
     }
 
-    public async Task<Session> GetBySignature(string signature)
+    public async Task<InitialSession> GetBySignature(string signature)
     {
         return await _appDbContext.Sessions
             .FirstAsync(e => e.Signature == signature);
     }
 
-    public async Task<Session> GetByUserPublicKey(string publicKey)
+    public async Task<InitialSession> GetByUserPublicKey(string publicKey)
     {
         return await _appDbContext.Sessions
             .FirstAsync(e => e.PublicKey == publicKey);

@@ -6,21 +6,19 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Web.OptionsSetup;
 
-public class JwtBearerOptionsSetup : IConfigureOptions<JwtBearerOptions>
+public class JwtBearerOptionsSetup(IOptions<JwtOptions> jwtOptions) : IPostConfigureOptions<JwtBearerOptions>
 {
-    private readonly JwtOptions _jwtOptions;
-
-    public JwtBearerOptionsSetup(IOptions<JwtOptions> jwtOptions)
-    {
-        _jwtOptions = jwtOptions.Value;
-    }
-
-    public void Configure(JwtBearerOptions optionsSetup)
+    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
+    public void PostConfigure(string? name, JwtBearerOptions optionsSetup)
     {
         optionsSetup.TokenValidationParameters = new()
         {
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
+            ValidIssuer = _jwtOptions.Issuer,
+            ValidAudience = _jwtOptions.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_jwtOptions.SecretKey))
         };

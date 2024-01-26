@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Application.Customers.InitSession;
 
-public record InitSessionCommand(string ClientPublicKey) : IRequest<Session>;
+public record InitSessionCommand(string ClientPublicKey) : IRequest<InitialSession>;

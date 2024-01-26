@@ -12,7 +12,7 @@ public class UserRepository : IUserRepository
     {
         _appDbContext = appDbContext;
     }
-    public async Task<User> GetUserByTag(string tag)
+    public async Task<User> GetUserByTag(string? tag)
     {
         return await _appDbContext.Users
             .FirstAsync(e => e.Tag == tag);

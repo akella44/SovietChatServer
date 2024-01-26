@@ -1,6 +1,6 @@
-﻿namespace Application.Customers.Register.Create.Request;
+namespace Application.Customers.Register.Create.Request;
 
-public class CreateUserRequest
+public class reateUserRequest
 {
     public string Name { get; set; }
     public string Email { get; set; }

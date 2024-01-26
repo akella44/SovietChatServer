@@ -7,23 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace Web.Controllers;
 [ApiController]
 [Route("api/v1")]
-public class InitController : ControllerBase
+public sealed class InitialSessionController(ISender sender) : ControllerBase
 {
-    private readonly ISender _sender;
-
-    public InitController(ISender sender)
-    {
-        _sender = sender;
-    }
-
     [HttpPost("init")]
     [Consumes("text/plain")]
     public async Task<IResult> Init([FromBody] string body)
     {
-        var session = await _sender.Send(new InitSessionCommand(body));
+        var session = await sender.Send(new InitSessionCommand(body));
         Response.Headers["signature"] = session.Signature;
         string encryptedSessionKey =
-            await _sender.Send(new EncryptCommand<RsaProvider>(session.SessionKey, session.PublicKey));
+            await sender.Send(new EncryptCommand<RsaProvider>(session.SessionKey, session.PublicKey));
         
         return Results.Content(encryptedSessionKey);
     }

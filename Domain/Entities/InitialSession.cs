@@ -4,29 +4,27 @@ using Domain.Cryptography;
 namespace Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
-[Table("Sessions")]
-public class Session
+[Table("InitialSessions")]
+public class InitialSession
 {
-    public Session()
+    public InitialSession()
     {
-        SessionId = Ulid.NewUlid().ToString();
         Signature = Sha256Encoder.Encrypt(SessionId.ToString());
-        CreatedTime = DateTime.UtcNow;
         SessionKey = AesKeyGenerator.GenerateKey();
     }
 
     [Key]
     [Column("session_id")] 
-    public string SessionId { get; private set; }
+    public string SessionId { get; private set; } = Ulid.NewUlid().ToString();
     [Column("session_created_time")] 
-    public DateTime CreatedTime { get; private set; }
+    public DateTime CreatedTime { get; private set; } = DateTime.Now;
 
     [Column("session_signature")]
     public string Signature { get; private set; }
-    
+    [Base64String]
     [Column("user_public_key")]
-    public string PublicKey { get; set; }
-    
+    public string PublicKey { get; init; }
+    [Base64String]
     [Column("session_key")]
     public string SessionKey { get; private set; }
 }

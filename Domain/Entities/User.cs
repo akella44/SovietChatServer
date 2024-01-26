@@ -10,19 +10,18 @@ public class User
 {
     [Key]
     [Column("user_id")]
-    public int Id { get; private set; }
+    public string Id { get; private set; } = Ulid.NewUlid().ToString();
     [Required]
     [Column("user_name")]
-    public string Name { get; set; }
+    public string Name { get; init; }
     [Required]
     [Column("user_email")]
-    public string Email { get; set; }
+    public string Email { get; init; }
     [Required]
     [Column("user_tag")]
-    public string Tag { get; set; }
+    public string Tag { get; init; }
     [Required]
     [Column("user_password")]
-    public string Password { get; set; }
-
+    public string Password { get; init; }
     public ICollection<Chat> Chats { get; private set; } = new List<Chat>();
 }
