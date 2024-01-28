@@ -8,6 +8,11 @@ namespace Domain.Entities;
 [Table("Users")]
 public class User
 {
+    public User()
+    {
+        Chats = new List<Chat>();
+    }
+    
     [Key]
     [Column("user_id")]
     public string Id { get; private set; } = Ulid.NewUlid().ToString();
@@ -23,5 +28,6 @@ public class User
     [Required]
     [Column("user_password")]
     public string Password { get; init; }
-    public ICollection<Chat> Chats { get; private set; } = new List<Chat>();
+
+    public ICollection<Chat> Chats { get; set; }
 }

@@ -17,13 +17,23 @@ public class UserRepository : IUserRepository
         return await _appDbContext.Users
             .FirstAsync(e => e.Tag == tag);
     }
+
+    public async Task<User> GetUserWithLinkedDataByTag(string tag)
+    {
+        var user = await _appDbContext.Users
+            .FirstAsync(e => e.Tag == tag);
+        user.Chats = _appDbContext.Chats.Include(c => c.Users.Where(u => u.Id == user.Id)).ToList();
+        return user;
+    }
+
     public async Task<User> GetUserByEmail(string email)
     {
         return await _appDbContext.Users
-            .FirstAsync(e => e.Email == email);
+            .FirstAsync(u => u.Email == email);
     }
     public async Task UpdateUser(User user)
     {
+        _appDbContext.Users.Include(a => a.Chats);
         throw new NotImplementedException();
     }
     public async Task AddUser(User user)

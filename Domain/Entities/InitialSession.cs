@@ -17,7 +17,7 @@ public class InitialSession
     [Column("session_id")] 
     public string SessionId { get; private set; } = Ulid.NewUlid().ToString();
     [Column("session_created_time")] 
-    public DateTime CreatedTime { get; private set; } = DateTime.Now;
+    public DateTime CreatedTime { get; private set; } = DateTime.UtcNow;
 
     [Column("session_signature")]
     public string Signature { get; private set; }

@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 
 namespace Application.Messaging.CreateChat;
@@ -17,7 +17,10 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand>
 
     public async Task Handle(CreateChatCommand request, CancellationToken cancellationToken)
     {
-        var chat = new Chat();
+        var chat = new Domain.Entities.Chat
+        {
+            ChatType = ChatTypes.Group
+        };
         foreach (var tag in request.UserTags)
         {
             chat.Users.Add(await _userRepository.GetUserByTag(tag));

@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers;
 [ApiController]
-[Route("api/v1")]
+[Route("api/v1/login")]
 public sealed class LoginController(ISender sender) : ControllerBase
 {
-    [HttpPost("login")]
+    [HttpPost("")]
     [Consumes("text/plain")]
     public async Task<IResult> Login([FromBody] string body)
     {
@@ -29,5 +29,13 @@ public sealed class LoginController(ISender sender) : ControllerBase
         string encryptedJwtToken = await sender.Send(new EncryptCommand<AesProvider>(jwtToken, session.SessionKey));
         
         return Results.Content(encryptedJwtToken);
+    }
+    
+    
+    [HttpPost("login-without-encrypt")]
+    public async Task<IResult> LoginWithoutEncrypt(LoginCommand loginCommand)
+    {
+        string jwtToken = await sender.Send(loginCommand);
+        return Results.Ok(jwtToken);
     }
 }

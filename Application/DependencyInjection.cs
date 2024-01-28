@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Cryptography;
 using Application.Cryptography.Providers;
+using Application.Mappings;
 using Domain.Cryptography;
 using MediatR;
 
@@ -13,6 +14,8 @@ public static class DependencyInjection
             cf => cf.RegisterServicesFromAssembly(
                 typeof(DependencyInjection).Assembly));
 
+        services.AddAutoMapper(typeof(MappingProfile));
+        
         services.AddTransient<RsaProvider>();
         services.AddTransient<AesProvider>();
         

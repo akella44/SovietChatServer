@@ -10,14 +10,15 @@ public class Message
     [Column("message_id")] 
     public string Id { get; private set; } = Ulid.NewUlid().ToString();
     [Required]
-    [Column("message_owner_id")] 
-    public User MessageOwner { get; set; }
+    public User MessageOwner { get; init; }
+    [Required]
+    public Chat MessageChat { get; init; }
     [Required]
     [Column("message_type")]
     [EnumDataType(typeof(MessageTypes))]
-    public MessageTypes MessageType { get; set; }
+    public MessageTypes MessageType { get; init; }
     [Column("message_value")]
-    public string? Value { get; set; }
+    public string? Value { get; init; }
     [Required]
     [Column("message_send_time")]
     public DateTime SendTime { get; private set; } = DateTime.UtcNow;
