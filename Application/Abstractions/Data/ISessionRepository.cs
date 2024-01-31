@@ -4,8 +4,8 @@ namespace Application.Interfaces;
 
 public interface ISessionRepository
 {
-    Task AddSession(InitialSession initialSession);
-    Task<InitialSession> GetBySignature(string signature);
+    public Task AddSession(Session session);
+    public Task<Session> GetSessionByUserId(string Id);
 
-    Task<InitialSession> GetByUserPublicKey(string publicKey);
+    public Task UpdateOrAddConnection(Session session);
 }

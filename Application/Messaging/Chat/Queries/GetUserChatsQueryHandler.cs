@@ -19,20 +19,20 @@ public class GetUserChatsQueryHandler : IRequestHandler<GetUserChatsQuery, IEnum
     {
         var user = await _userRepository.GetUserWithLinkedDataByTag(request.Tag);
         List<ChatDto> listOfChatDtos = new List<ChatDto>();
-
+        
         foreach (var chat in user.Chats)
         {
             var lastMessageCollection = await _messageRepository.GetChunkMessages(chat.ChatId, 1, 1);
-            var messageCollection = lastMessageCollection as Domain.Entities.Message[] ?? lastMessageCollection.ToArray();
-            var chatDto = new ChatDto()
+            Domain.Entities.Message? lastMessage = lastMessageCollection.Count() != 0 ? lastMessageCollection.First() : null;
+            ChatDto chatDto = new ChatDto()
             {
                 ChatId = chat.ChatId,
                 ChatName = chat.ChatName,
                 ChatType = chat.ChatType.ToString(),
-                LastMessageValue = messageCollection.Count() != 0 ? messageCollection.First().Value : null,
-                LastMessageType = messageCollection.Count() != 0 ? messageCollection.First().MessageType.ToString() : null,
-                NameOfLastMessageSender =  messageCollection.Count() != 0 ? messageCollection.First().MessageOwner.Name : null,
-                TimeOfLastMessage = messageCollection.Count() != 0 ? messageCollection.First().SendTime : null
+                LastMessageValue = lastMessage != null ? lastMessage.Value : null,
+                LastMessageType = lastMessage != null ? lastMessage.MessageType.ToString() : null,
+                NameOfLastMessageSender = lastMessage != null ? lastMessage.MessageOwner.Name : null,
+                TimeOfLastMessage = lastMessage != null ? lastMessage.SendTime : null
             };
             listOfChatDtos.Add(chatDto);
         }

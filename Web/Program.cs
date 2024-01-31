@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Web.Formatters;
+using Web.Hubs;
 using Web.OptionsSetup;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ builder.Services.ConfigureOptions<JwtOptionsSetup>();
 builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 builder.Services.ConfigureOptions<SwaggerOptionsSetup>();
 
+builder.Services.AddSignalR();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();                
 
@@ -42,5 +45,7 @@ app.MapControllers();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapHub<ChatHub>("chat");
 
 app.Run();

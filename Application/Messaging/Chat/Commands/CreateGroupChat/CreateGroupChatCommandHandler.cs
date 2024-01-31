@@ -2,20 +2,20 @@
 using Domain.Enums;
 using MediatR;
 
-namespace Application.Messaging.CreateChat;
+namespace Application.Messaging.Chat.Commands.CreateGroupChat;
 
-public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand>
+public class CreateGroupChatCommandHandler : IRequestHandler<CreateGroupChatCommand>
 {
     private readonly IChatRepository _chatRepository;
     private readonly IUserRepository _userRepository;
 
-    public CreateChatCommandHandler(IChatRepository chatRepository, IUserRepository userRepository)
+    public CreateGroupChatCommandHandler(IChatRepository chatRepository, IUserRepository userRepository)
     {
         _chatRepository = chatRepository;
         _userRepository = userRepository;
     }
 
-    public async Task Handle(CreateChatCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateGroupChatCommand request, CancellationToken cancellationToken)
     {
         var chat = new Domain.Entities.Chat
         {

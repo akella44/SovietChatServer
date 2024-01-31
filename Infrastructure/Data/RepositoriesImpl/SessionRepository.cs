@@ -13,21 +13,28 @@ public class SessionRepository : ISessionRepository
         _appDbContext = appDbContext;
     }
 
-    public async Task AddSession(InitialSession initialSession)
+    public async Task AddSession(Session session)
     {
-       await _appDbContext.Sessions.AddAsync(initialSession);
-       await _appDbContext.SaveChangesAsync();
+        await _appDbContext.Sessions.AddAsync(session);
+        await _appDbContext.SaveChangesAsync();
     }
 
-    public async Task<InitialSession> GetBySignature(string signature)
+    public async Task<Session> GetSessionByUserId(string id)
     {
-        return await _appDbContext.Sessions
-            .FirstAsync(e => e.Signature == signature);
+        return await _appDbContext.Sessions.FirstAsync(s => s.User.Id == id);
     }
 
-    public async Task<InitialSession> GetByUserPublicKey(string publicKey)
+    public async Task UpdateOrAddConnection(Session newSession)
     {
-        return await _appDbContext.Sessions
-            .FirstAsync(e => e.PublicKey == publicKey);
+        Session? session = await _appDbContext.Sessions.FirstOrDefaultAsync(
+            s => s.User.Id == newSession.User.Id);
+        if (session != null)
+        {
+            session.Connection = newSession.Connection;
+            await _appDbContext.SaveChangesAsync();
+            return;
+        }
+
+        await AddSession(newSession);
     }
 }

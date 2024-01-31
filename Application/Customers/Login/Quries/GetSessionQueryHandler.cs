@@ -6,15 +6,15 @@ namespace Application.Customers.Login.Quries;
 
 public class GetSessionQueryHandler : IRequestHandler<GetSessionQuery, InitialSession>
 {
-    public ISessionRepository _sessionRepository;
+    public IInitialSessionRepository InitialSessionRepository;
 
-    public GetSessionQueryHandler(ISessionRepository sessionRepository)
+    public GetSessionQueryHandler(IInitialSessionRepository initialSessionRepository)
     {
-        _sessionRepository = sessionRepository;
+        InitialSessionRepository = initialSessionRepository;
     }
     
     public async Task<InitialSession> Handle(GetSessionQuery request, CancellationToken cancellationToken)
     {
-        return await _sessionRepository.GetBySignature(request.Signature);
+        return await InitialSessionRepository.GetBySignature(request.Signature);
     }
 }

@@ -8,7 +8,7 @@ namespace Web.Controllers;
 public sealed class MessageController(ISender sender) : ControllerBase
 {
     [HttpPost("send-without-encrypt")]
-    public async Task<IResult> SendMessage(SendMessageCommand sendMessageCommand)
+    public async Task<IResult> SendMessage(TestSendMessageCommand sendMessageCommand)
     {
         await sender.Send(sendMessageCommand);
         return Results.Ok();

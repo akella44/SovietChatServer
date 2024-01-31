@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain.Enums;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.Messaging.Message.Commands.SendMessage;
@@ -19,16 +19,15 @@ public class SendMessageCommandHandler : IRequestHandler<SendMessageCommand>
 
     public async Task Handle(SendMessageCommand request, CancellationToken cancellationToken)
     {
-        var chat = await _chatRepository.GetByChatId(request.ChatId);
-        var user = await _userRepository.GetUserByTag(request.UserTag);
-        Enum.TryParse<MessageTypes>(request.MessageType, out var enumObj);
-        var message = new Domain.Entities.Message()
+        var message = new Domain.Entities.Message
         {
-            MessageChat = chat,
-            MessageOwner = user,
-            MessageType = enumObj,
+            MessageChat = await _chatRepository.GetByChatId(request.ChatId),
+            MessageOwner = await _userRepository.GetUserByTag(request.UserTag),
+            MessageType = request.MessageType,
             Value = request.Value
         };
         await _messageRepository.AddMessage(message);
+        
+        
     }
 }

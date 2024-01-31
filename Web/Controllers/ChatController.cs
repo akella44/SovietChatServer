@@ -2,14 +2,13 @@
 using System.Text.Json;
 using Application.Cryptography.Providers;
 using Application.Customers.Login.Quries;
+using Application.Messaging.Chat.Commands.CreateGroupChat;
 using Application.Messaging.Chat.Queries;
-using Application.Messaging.CreateChat;
 using Application.Model;
 using Domain.Cryptography;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using HostingEnvironmentExtensions = Microsoft.Extensions.Hosting.HostingEnvironmentExtensions;
 
 namespace Web.Controllers;
 [ApiController]
@@ -30,18 +29,18 @@ public sealed class ChatController(ISender sender) : ControllerBase
         var session = await sender.Send(sessionQuery);
         var decryptedData = await sender.Send(new DecryptCommand<AesProvider>(body, session.SessionKey));
         
-        CreateChatCommand? createChatCommand = JsonSerializer.Deserialize<CreateChatCommand>(decryptedData);
+        CreateGroupChatCommand? createChatGroupCommand = JsonSerializer.Deserialize<CreateGroupChatCommand>(decryptedData);
         
-        if (createChatCommand == null)
+        if (createChatGroupCommand == null)
             return Results.BadRequest();
         
-        createChatCommand.UserTags.Add(User.FindFirstValue(ClaimTypes.NameIdentifier));
-        await sender.Send(createChatCommand);
+        createChatGroupCommand.UserTags.Add(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        await sender.Send(createChatGroupCommand);
         
         return Results.Ok();
     }
     
-    [HttpGet("my-chats")]
+    [HttpGet("my")]
     public async Task<IResult> GetUserChats()
     {
         Request.Headers.TryGetValue("signature", out var signature );
@@ -70,10 +69,10 @@ public sealed class ChatController(ISender sender) : ControllerBase
         await sender.Send(createChatCommand);
         
         return Results.Ok();
-    }
+    }*/
     
     [HttpGet("my-chats-without-encrypt")]
-    public async Task<IResult> GetUserChats()
+    public async Task<IResult> GetUserChatsWithoutEncrypt()
     {
         if (User.FindFirstValue(ClaimTypes.NameIdentifier) == null)
             return Results.BadRequest();
@@ -82,5 +81,5 @@ public sealed class ChatController(ISender sender) : ControllerBase
         IEnumerable<ChatDto> chatDtos = await sender.Send(getUserChatsQuery);
         
         return Results.Ok(chatDtos);
-    }*/
+    }
 }

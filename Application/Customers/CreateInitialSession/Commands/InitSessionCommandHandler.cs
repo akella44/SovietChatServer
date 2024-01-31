@@ -8,11 +8,11 @@ namespace Application.Customers.InitSession;
 
 public class InitSessionCommandHandler : IRequestHandler<InitSessionCommand, InitialSession>
 {
-    public ISessionRepository _sessionRepository;
+    public IInitialSessionRepository InitialSessionRepository;
     
-    public InitSessionCommandHandler(ISessionRepository sessionRepository)
+    public InitSessionCommandHandler(IInitialSessionRepository initialSessionRepository)
     {
-        _sessionRepository = sessionRepository;
+        InitialSessionRepository = initialSessionRepository;
     }
 
     public async Task<InitialSession> Handle(InitSessionCommand request, CancellationToken cancellationToken)
@@ -22,7 +22,7 @@ public class InitSessionCommandHandler : IRequestHandler<InitSessionCommand, Ini
             PublicKey = request.ClientPublicKey
         };
 
-        await _sessionRepository.AddSession(session);
+        await InitialSessionRepository.AddSession(session);
 
         return session;
         /*return Convert.ToBase64String(RsaEncoder.EncryptData(Convert.FromBase64String(session.SessionKey), session.PublicKey));*/
